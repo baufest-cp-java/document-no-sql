@@ -1,8 +1,10 @@
 package controllers;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Set;
 
+import models.Post;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -15,6 +17,7 @@ import com.mongodb.MongoClient;
 public class Application extends Controller {
 
 	static Form<User> userForm = Form.form(User.class);
+	static Form<Post> postForm = Form.form(Post.class);
 	
     public static Result index() {
     	return redirect(routes.Application.signup());
@@ -33,6 +36,19 @@ public class Application extends Controller {
     }
     
     public static Result logout() {
+        return TODO;
+    }
+    
+    public static Result blog(String user) {
+    	//TODO pasar lista de los últimos posts
+    	return ok(views.html.blog.render(user,new ArrayList<Post>())); 
+    }
+    
+    public static Result postForm(String user) {
+    	return ok(views.html.createPost.render(user,postForm));
+    }
+    
+    public static Result newPost(String user) {
         return TODO;
     }
     

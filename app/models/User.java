@@ -10,6 +10,10 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
+/**
+ * @author rfanego
+ */
+
 public class User {
 	@Required
 	private String name;
