@@ -1,0 +1,21 @@
+@(user:String,postForm: Form[Post])
+
+@import helper._
+
+@main("Register User") {
+
+    <h2>Crear usuario</h2>
+    
+    @form(routes.Application.newPost(user)) {
+        
+        @inputText(postForm("title"))
+        
+        @inputText(postForm("body"))
+        
+        @inputText(postForm("tags")) 
+        
+        <input type="submit" value="Create">
+        
+    }
+
+}
