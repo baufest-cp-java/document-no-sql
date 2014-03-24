@@ -27,7 +27,8 @@ public class Application extends Controller {
     	return ok(views.html.index.render(userForm));
     }
     
-    public static Result welcome(String user) {
+    public static Result welcome() {
+    	String user = session("userName");
     	return ok(views.html.welcome.render(user));
     }
     
@@ -36,19 +37,22 @@ public class Application extends Controller {
     }
     
     public static Result logout() {
-        return TODO;
+    	session().remove("userName");
+    	return ok(views.html.login.render());
     }
     
-    public static Result blog(String user) {
+    public static Result blog() {
     	//TODO pasar lista de los últimos posts
+    	String user = session("userName");
     	return ok(views.html.blog.render(user,new ArrayList<Post>())); 
     }
     
-    public static Result postForm(String user) {
+    public static Result postForm() {
+    	String user = session("userName");
     	return ok(views.html.createPost.render(user,postForm));
     }
     
-    public static Result newPost(String user) {
+    public static Result newPost() {
         return TODO;
     }
     
@@ -59,8 +63,9 @@ public class Application extends Controller {
     	      views.html.index.render(filledForm)
     	    );
     	  } else {
-    	    if(User.create(filledForm.get())){    	    	
-    	    	return redirect(routes.Application.welcome(filledForm.get().getName()));
+    	    if(User.create(filledForm.get())){
+    	    	session("userName", filledForm.get().getName());
+    	    	return redirect(routes.Application.welcome());
     	    }else{
     	    	return badRequest(
     	      	      views.html.index.render(filledForm)
