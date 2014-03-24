@@ -33,12 +33,26 @@ public class Application extends Controller {
     }
     
     public static Result login() {
-        return TODO;
+    	Form<User> filledForm = userForm.bindFromRequest();
+    	if(filledForm.hasErrors()) {
+    	    return badRequest(
+    	      views.html.login.render(filledForm)
+    	    );
+    	  } else {
+    	    if(User.validate(filledForm.get())){
+    	    	session("userName", filledForm.get().getName());
+    	    	return redirect(routes.Application.welcome());
+    	    }else{
+    	    	return badRequest(
+    	      	      views.html.login.render(filledForm)
+    	      	    );
+    	    }
+    	  }
     }
     
     public static Result logout() {
     	session().remove("userName");
-    	return ok(views.html.login.render());
+    	return ok(views.html.login.render(userForm));
     }
     
     public static Result blog() {

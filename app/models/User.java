@@ -40,16 +40,7 @@ public class User {
 	}
 	
 	public static boolean create(User user) {
-		MongoClient mongoClient = null;
-		try {
-			mongoClient = new MongoClient( "localhost" , 27017 );
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
-    	DB db = mongoClient.getDB( "blog" );
-    	
-    	DBCollection userCollection = db.getCollection("User");
+		DBCollection userCollection = getUserCollection();
     	
     	BasicDBObject userDB = new BasicDBObject();
     	userDB.append("_id", user.getName());
@@ -67,6 +58,28 @@ public class User {
             System.out.println("Username already in use: " + user.getName());
             return false;
         }
-    	
+	}
+	
+	
+	public static boolean validate(User user){
+		DBCollection userCollection = getUserCollection();
+		
+		BasicDBObject userDB = new BasicDBObject("_id",user.getName()).append("password", user.getPassword());
+		
+		return userCollection.findOne(userDB) != null;	
+	}
+	
+	private static DBCollection getUserCollection() {
+		MongoClient mongoClient = null;
+		try {
+			mongoClient = new MongoClient( "localhost" , 27017 );
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		DB db = mongoClient.getDB( "blog" );
+		
+		DBCollection userCollection = db.getCollection("User");
+		return userCollection;
 	}
 }
