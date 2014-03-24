@@ -35,19 +35,15 @@ public class Application extends Controller {
     public static Result login() {
     	Form<User> filledForm = userForm.bindFromRequest();
     	if(filledForm.hasErrors()) {
-    	    return badRequest(
-    	      views.html.login.render(filledForm)
-    	    );
-    	  } else {
-    	    if(User.validate(filledForm.get())){
-    	    	session("userName", filledForm.get().getName());
-    	    	return redirect(routes.Application.welcome());
-    	    }else{
-    	    	return badRequest(
-    	      	      views.html.login.render(filledForm)
-    	      	    );
-    	    }
-    	  }
+    		return badRequest(views.html.login.render(filledForm));
+    	} else {
+    		if(User.validate(filledForm.get())){
+    			session("userName", filledForm.get().getName());
+    			return redirect(routes.Application.welcome());
+    		}else{
+    			return badRequest(views.html.login.render(filledForm));
+    		}
+    	}
     }
     
     public static Result logout() {
@@ -67,25 +63,36 @@ public class Application extends Controller {
     }
     
     public static Result newPost() {
-        return TODO;
+    	Form<Post> filledForm = postForm.bindFromRequest();
+    	String user = session("userName");
+    	
+    	Post postFromForm = filledForm.get();
+    	postFromForm.setAuthor(user);
+
+    	if(filledForm.hasErrors()) {
+    		return badRequest(views.html.createPost.render(user,filledForm));
+    	} else {
+    		try{
+    			Post post = Post.create(postFromForm);
+    			return redirect(routes.Application.welcome()); //TODO crear página para mostrar el post individual
+    		}catch(Exception e){
+    			return badRequest(views.html.createPost.render(user,filledForm),e.getMessage());
+    		}
+    	}
     }
     
     public static Result newUser() {
     	Form<User> filledForm = userForm.bindFromRequest();
-    	  if(filledForm.hasErrors()) {
-    	    return badRequest(
-    	      views.html.index.render(filledForm)
-    	    );
-    	  } else {
-    	    if(User.create(filledForm.get())){
-    	    	session("userName", filledForm.get().getName());
-    	    	return redirect(routes.Application.welcome());
-    	    }else{
-    	    	return badRequest(
-    	      	      views.html.index.render(filledForm)
-    	      	    );
-    	    }
-    	  }
+    	if(filledForm.hasErrors()) {
+    		return badRequest(views.html.index.render(filledForm));
+    	} else {
+    		if(User.create(filledForm.get())){
+    			session("userName", filledForm.get().getName());
+    			return redirect(routes.Application.welcome());
+    		}else{
+    			return badRequest(views.html.index.render(filledForm));
+    		}
+    	}
     }
     
     public static Result mongoTest(){

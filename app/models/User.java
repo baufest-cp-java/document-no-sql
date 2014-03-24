@@ -3,6 +3,7 @@ package models;
 import java.net.UnknownHostException;
 
 import play.data.validation.Constraints.Required;
+import utils.MongoUtil;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -15,6 +16,7 @@ import com.mongodb.MongoException;
  */
 
 public class User {
+	private static final String USER_COLLECTION_NAME = "User";
 	@Required
 	private String name;
 	@Required
@@ -40,7 +42,7 @@ public class User {
 	}
 	
 	public static boolean create(User user) {
-		DBCollection userCollection = getUserCollection();
+		DBCollection userCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
     	
     	BasicDBObject userDB = new BasicDBObject();
     	userDB.append("_id", user.getName());
@@ -62,24 +64,10 @@ public class User {
 	
 	
 	public static boolean validate(User user){
-		DBCollection userCollection = getUserCollection();
+		DBCollection userCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
 		
 		BasicDBObject userDB = new BasicDBObject("_id",user.getName()).append("password", user.getPassword());
 		
 		return userCollection.findOne(userDB) != null;	
-	}
-	
-	private static DBCollection getUserCollection() {
-		MongoClient mongoClient = null;
-		try {
-			mongoClient = new MongoClient( "localhost" , 27017 );
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		DB db = mongoClient.getDB( "blog" );
-		
-		DBCollection userCollection = db.getCollection("User");
-		return userCollection;
 	}
 }

@@ -8,11 +8,11 @@
     
     @form(routes.Application.newPost()) {
         
-        @inputText(postForm("title"))
+        @inputText(postForm("title"), args = 'size -> 60)
         
-        @inputText(postForm("body"))
+        @textarea(field = postForm("body"), args = 'rows -> 15, 'cols -> 80)
         
-        @inputText(postForm("tags")) 
+        @inputText(field = postForm("tags"), args = 'size -> 30, 'placeholder -> "tag1,tag2,...")
         
         <input type="submit" value="Create">
         
