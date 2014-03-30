@@ -19,45 +19,58 @@ import com.mongodb.DBCollection;
  */
 public class Post {
 	private static final String USER_COLLECTION_NAME = "Post";
-	private String author;
 	@Required
 	private String body;
 	@Required
 	private String title;
 	@Required
 	private String tag;
+	private String author;
 	private String permalink;
 	private List<String> tags;
-	private List<String> comments;
+	private List<Comment> comments;
 	private Date creationDate;
 	private List<String> likes;
 	
 	public String getTag() {
 		return tag;
 	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	
 	public String getAuthor() {
 		return author;
 	}
+	
 	public String getBody() {
 		return body;
 	}
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public String getPermalink() {
 		return permalink;
 	}
 	public List<String> getTags() {
 		return tags;
 	}
-	public List<String> getComments() {
-		return comments;
+	public List<Comment> getComments() {
+		return comments == null ? new ArrayList<Comment>() : comments;
 	}
 	public Date getCreationDate() {
 		return creationDate;
 	}
 	public List<String> getLikes() {
-		return likes;
+		return likes == null ? new ArrayList<String>() : likes;
 	}
 	
 	private void setTags(List<String> tags) {

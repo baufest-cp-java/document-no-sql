@@ -17,6 +17,8 @@ POST    /user                     	controllers.Application.newUser()
 GET    /post                     	controllers.Application.postForm()
 POST   /post                     	controllers.Application.newPost()
 
+POST   /comment						controllers.Application.newComment()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 

@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import models.Comment;
 import models.Post;
 import models.User;
 import play.data.Form;
@@ -18,6 +19,7 @@ public class Application extends Controller {
 
 	static Form<User> userForm = Form.form(User.class);
 	static Form<Post> postForm = Form.form(Post.class);
+	static Form<Comment> commentForm = Form.form(Comment.class);
 	
     public static Result index() {
     	return redirect(routes.Application.signup());
@@ -65,20 +67,25 @@ public class Application extends Controller {
     public static Result newPost() {
     	Form<Post> filledForm = postForm.bindFromRequest();
     	String user = session("userName");
-    	
-    	Post postFromForm = filledForm.get();
-    	postFromForm.setAuthor(user);
 
     	if(filledForm.hasErrors()) {
     		return badRequest(views.html.createPost.render(user,filledForm));
     	} else {
+    		Post postFromForm = filledForm.get();
+    		postFromForm.setAuthor(user);
+    		
     		try{
     			Post post = Post.create(postFromForm);
-    			return redirect(routes.Application.welcome()); //TODO crear página para mostrar el post individual
+    			return ok(views.html.post.render(user,post,commentForm));
     		}catch(Exception e){
     			return badRequest(views.html.createPost.render(user,filledForm),e.getMessage());
     		}
     	}
+    }
+    
+    public static Result newComment() {
+    	Form<Comment> filledForm = commentForm.bindFromRequest();
+    	return TODO;
     }
     
     public static Result newUser() {

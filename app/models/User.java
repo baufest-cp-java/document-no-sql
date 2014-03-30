@@ -1,14 +1,10 @@
 package models;
 
-import java.net.UnknownHostException;
-
 import play.data.validation.Constraints.Required;
 import utils.MongoUtil;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
 /**

@@ -2,20 +2,19 @@
 
 @import helper._
 
-@main("Register User") {
+@main("Create Post") {
 
     <h2>Crear usuario</h2>
     
     @form(routes.Application.newPost()) {
         
-        @inputText(postForm("title"), args = 'size -> 60)
+        @inputText(field = postForm("title"), args = 'size -> 60)
         
         @textarea(field = postForm("body"), args = 'rows -> 15, 'cols -> 80)
         
-        @inputText(field = postForm("tags"), args = 'size -> 30, 'placeholder -> "tag1,tag2,...")
+        @inputText(field = postForm("tag"), args = 'size -> 30, 'placeholder -> "tag1,tag2,...")
         
         <input type="submit" value="Create">
-        
     }
 
 }
