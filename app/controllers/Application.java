@@ -59,6 +59,10 @@ public class Application extends Controller {
     	return ok(views.html.blog.render(user,new ArrayList<Post>())); 
     }
     
+    public static Result post(String permalink) {
+    	return TODO;
+    }
+    
     public static Result postForm() {
     	String user = session("userName");
     	return ok(views.html.createPost.render(user,postForm));
@@ -85,7 +89,14 @@ public class Application extends Controller {
     
     public static Result newComment() {
     	Form<Comment> filledForm = commentForm.bindFromRequest();
-    	return TODO;
+    	String user = session("userName");
+    	Post post = Post.findByPermalink(filledForm.field("permalink").value());
+    	
+    	if(filledForm.hasErrors()) {
+    		return badRequest(views.html.post.render(user,post,commentForm));
+    	} else {
+    		return TODO;
+    	}
     }
     
     public static Result newUser() {

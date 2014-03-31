@@ -31,6 +31,7 @@
 		@inputText(field = commentForm("author"), args = 'size -> 60)
 		@inputText(field = commentForm("email"), args = 'size -> 60)
 		@textarea(field = commentForm("body"), args = 'rows -> 10, 'cols -> 40)
+		<input type="hidden" name="permalink" id="permalink" value="@post.getPermalink()" />
 		
 		<input type="submit" value="Create">
 	}

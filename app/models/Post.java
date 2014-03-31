@@ -13,6 +13,7 @@ import utils.MongoUtil;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 /**
  * @author rfanego
@@ -81,6 +82,22 @@ public class Post {
 		this.author = author;
 	}
 	
+	public void setPermalink(String permalink) {
+		this.permalink = permalink;
+	}
+	
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+	
+	public void setLikes(List<String> likes) {
+		this.likes = likes;
+	}
+	
 	public static Post create(Post post) {
 		DBCollection postCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
 		
@@ -88,7 +105,7 @@ public class Post {
         permalink = permalink.replaceAll("\\W", ""); // get rid of non alphanumeric
         permalink = permalink.toLowerCase();
 		
-		post.setTags(new ArrayList<String>(Arrays.asList(post.getTag().split(","))));
+		post.setTags(fromTagToTagsList(post));
 		
 		BasicDBObject postDB = new BasicDBObject("title", post.getTitle());
         postDB.append("author", post.getAuthor());
@@ -104,5 +121,28 @@ public class Post {
         } catch (Exception e) {
             throw new RuntimeException("Ha ocurrido un error al generar el post, intentelo nuevamente");
         }
+	}
+	
+	public static Post findByPermalink(String permalink){
+		DBCollection postCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
+		
+		BasicDBObject postDB = new BasicDBObject("permalink",permalink);
+		
+		return createPostObject(postCollection.findOne(postDB));
+	}
+	
+	private static Post createPostObject(DBObject postObject) {
+		Post post = new Post();
+		post.setAuthor(postObject.get("author").toString());
+		post.setBody(postObject.get("body").toString());
+		post.setTags(fromTagToTagsList(post));
+		post.setTitle(postObject.get("title").toString());
+		post.setPermalink(postObject.get("permalink").toString());
+		//TODO terminar de popular el post con el dbobject
+		return null;
+	}
+	
+	private static ArrayList<String> fromTagToTagsList(Post post) {
+		return new ArrayList<String>(Arrays.asList(post.getTag().split(",")));
 	}
 }
