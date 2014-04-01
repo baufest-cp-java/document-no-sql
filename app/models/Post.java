@@ -13,6 +13,7 @@ import utils.MongoUtil;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 /**
@@ -105,7 +106,7 @@ public class Post {
         permalink = permalink.replaceAll("\\W", ""); // get rid of non alphanumeric
         permalink = permalink.toLowerCase();
 		
-		post.setTags(fromTagToTagsList(post));
+		post.setTags(fromTagToTagsList(post.getTag()));
 		
 		BasicDBObject postDB = new BasicDBObject("title", post.getTitle());
         postDB.append("author", post.getAuthor());
@@ -128,21 +129,33 @@ public class Post {
 		
 		BasicDBObject postDB = new BasicDBObject("permalink",permalink);
 		
-		return createPostObject(postCollection.findOne(postDB));
+		return setPostObject(postCollection.findOne(postDB));
 	}
 	
-	private static Post createPostObject(DBObject postObject) {
+	private static Post setPostObject(DBObject postObject) {
 		Post post = new Post();
 		post.setAuthor(postObject.get("author").toString());
 		post.setBody(postObject.get("body").toString());
-		post.setTags(fromTagToTagsList(post));
+		post.setTags(fromTagToTagsList(postObject.get("tags").toString()));
 		post.setTitle(postObject.get("title").toString());
 		post.setPermalink(postObject.get("permalink").toString());
 		//TODO terminar de popular el post con el dbobject
-		return null;
+		System.out.println(post.toString());
+		return post;
 	}
 	
-	private static ArrayList<String> fromTagToTagsList(Post post) {
-		return new ArrayList<String>(Arrays.asList(post.getTag().split(",")));
+	private static ArrayList<String> fromTagToTagsList(String tag) {
+		return new ArrayList<String>(Arrays.asList(tag.split(",")));
+	}
+	public static List<Post> findAll() {
+		List<Post> listPost = new ArrayList<Post>();
+		DBCursor cursor =  MongoUtil.getCollection(USER_COLLECTION_NAME).find();
+		try {
+		   while(cursor.hasNext())
+			   listPost.add(setPostObject(cursor.next()));
+		} finally {
+		   cursor.close();
+		}
+		return listPost;
 	}
 }

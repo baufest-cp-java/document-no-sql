@@ -2,6 +2,7 @@ package controllers;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import models.Comment;
@@ -56,11 +57,14 @@ public class Application extends Controller {
     public static Result blog() {
     	//TODO pasar lista de los últimos posts
     	String user = session("userName");
-    	return ok(views.html.blog.render(user,new ArrayList<Post>())); 
+    	List<Post> posts = Post.findAll();
+    	return ok(views.html.blog.render(user,posts)); 
     }
     
     public static Result post(String permalink) {
-    	return TODO;
+    	Post post= Post.findByPermalink(permalink);
+    	String user = session("userName");
+    	return ok(views.html.post.render(user,post,commentForm)); 
     }
     
     public static Result postForm() {

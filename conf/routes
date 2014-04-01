@@ -14,7 +14,7 @@ GET     /blog                     	controllers.Application.blog()
 
 POST    /user                     	controllers.Application.newUser()
 
-GET    /postCreation                controllers.Application.postForm()
+GET    /post		               controllers.Application.postForm()
 GET    /post/:permalink             controllers.Application.post(permalink)
 POST   /post                     	controllers.Application.newPost()
 
