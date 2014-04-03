@@ -99,7 +99,10 @@ public class Application extends Controller {
     	if(filledForm.hasErrors()) {
     		return badRequest(views.html.post.render(user,post,commentForm));
     	} else {
-    		return TODO;
+    		Comment comment= filledForm.get();
+    		post.addComment(comment);
+    		
+    		return ok(views.html.post.render(user,post,commentForm));
     	}
     }
     

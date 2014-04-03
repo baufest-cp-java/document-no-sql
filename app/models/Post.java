@@ -11,6 +11,7 @@ import java.util.List;
 import play.data.validation.Constraints.Required;
 import utils.MongoUtil;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -108,12 +109,15 @@ public class Post {
 		
 		post.setTags(fromTagToTagsList(post.getTag()));
 		
+				
 		BasicDBObject postDB = new BasicDBObject("title", post.getTitle());
         postDB.append("author", post.getAuthor());
         postDB.append("body", post.getBody());
         postDB.append("permalink", permalink);
         postDB.append("tags", post.getTags());
-        postDB.append("comments", new ArrayList<String>());
+        postDB.append("comments", new BasicDBList());
+        
+       
         postDB.append("date", new java.util.Date());
     	
         try {
@@ -157,5 +161,10 @@ public class Post {
 		   cursor.close();
 		}
 		return listPost;
+	}
+	
+	public void addComment(Comment comment) {
+		//TODO:
+		
 	}
 }
