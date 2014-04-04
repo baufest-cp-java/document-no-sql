@@ -84,7 +84,7 @@ public class Application extends Controller {
     		
     		try{
     			Post post = Post.create(postFromForm);
-    			return ok(views.html.post.render(user,post,commentForm));
+    			return redirect(routes.Application.post(post.getPermalink()));
     		}catch(Exception e){
     			return badRequest(views.html.createPost.render(user,filledForm),e.getMessage());
     		}
@@ -101,8 +101,7 @@ public class Application extends Controller {
     	} else {
     		Comment comment= filledForm.get();
     		post.addComment(comment);
-    		
-    		return ok(views.html.post.render(user,post,commentForm));
+    		return redirect(routes.Application.post(filledForm.field("permalink").value()));
     	}
     }
     

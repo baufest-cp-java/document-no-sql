@@ -106,6 +106,7 @@ public class Post {
 		String permalink = post.getTitle().replaceAll("\\s", "_"); // whitespace becomes _
         permalink = permalink.replaceAll("\\W", ""); // get rid of non alphanumeric
         permalink = permalink.toLowerCase();
+		post.setPermalink(permalink);
 		
 		post.setTags(fromTagToTagsList(post.getTag()));
 		
@@ -144,8 +145,22 @@ public class Post {
 		post.setTitle(postObject.get("title").toString());
 		post.setPermalink(postObject.get("permalink").toString());
 		//TODO terminar de popular el post con el dbobject
-		System.out.println(post.toString());
+		List<Comment> comments=new ArrayList<Comment>();
+		List<DBObject> commentsDB=((List<DBObject>) postObject.get("comments"));
+		for (DBObject dbObject: commentsDB){
+			comments.add(setCommentObject(dbObject));
+		}
+		post.setComments(comments);
+		System.out.println("SIZE COMMENTS: "+comments.size());
 		return post;
+	}
+	
+	private static Comment setCommentObject(DBObject postObject) {
+		Comment comment = new Comment();
+		comment.setAuthor(postObject.get("author").toString());
+		comment.setBody(postObject.get("body").toString());		
+		comment.setEmail(postObject.get("email").toString());
+		return comment;
 	}
 	
 	private static ArrayList<String> fromTagToTagsList(String tag) {
@@ -164,7 +179,18 @@ public class Post {
 	}
 	
 	public void addComment(Comment comment) {
-		//TODO:
+		DBCollection postCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);		
+		
+		BasicDBObject commentDB = new BasicDBObject().append("author", comment.getAuthor());
+		commentDB.append("email", comment.getEmail());
+		commentDB.append("body", comment.getBody());
+		
+		BasicDBObject newDocument = new BasicDBObject();
+		newDocument.append("$addToSet", new BasicDBObject().append("comments", commentDB));
+	 
+		BasicDBObject searchQuery = new BasicDBObject().append("permalink",permalink);
+	 
+		postCollection.update(searchQuery, newDocument);
 		
 	}
 }

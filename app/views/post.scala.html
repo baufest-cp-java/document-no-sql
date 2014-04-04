@@ -18,13 +18,17 @@
 	<br/>
 	<br/>
 	Comentarios: @if(post.getComments().size == 0) { Ninguno } 
+	<ul>
 	@for(comment <- post.getComments()) {
+		<li>
   		Autor: @comment.getAuthor()
   		@if(comment.getEmail() != null) {
   			Email: @comment.getEmail()
   		}
   		@comment.getBody()
+  		</li>
 	}
+	</ul>
 	<br/>
 	Agregar un comentario:
 	@form(routes.Application.newComment()) {
