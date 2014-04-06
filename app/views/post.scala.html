@@ -10,7 +10,7 @@
 	Likes: @post.getLikes().size()
 	<hr>
 	@post.getBody()
-	<br/>
+	<br/><br/>
 	Tags: 
 	@for(tag <- post.getTags()) {
   		@tag
@@ -18,21 +18,21 @@
 	<br/>
 	<br/>
 	Comentarios: @if(post.getComments().size == 0) { Ninguno } 
-	<ul>
+	<ul style="list-style-type: none;">
 	@for(comment <- post.getComments()) {
 		<li>
-  		Autor: @comment.getAuthor()
-  		@if(comment.getEmail() != null) {
-  			Email: @comment.getEmail()
+  		<b>Autor</b>: @comment.getAuthor()<br/>
+  		@if(comment.getEmail() != null && !comment.getEmail().isEmpty()) {
+  			Email: @comment.getEmail()<br/>
   		}
   		@comment.getBody()
   		</li>
+  		<br/>
 	}
 	</ul>
-	<br/>
 	Agregar un comentario:
 	@form(routes.Application.newComment()) {
-		@inputText(field = commentForm("author"), args = 'size -> 60)
+		<input type="hidden" name="author" id="author" value="@user" />
 		@inputText(field = commentForm("email"), args = 'size -> 60)
 		@textarea(field = commentForm("body"), args = 'rows -> 10, 'cols -> 40)
 		<input type="hidden" name="permalink" id="permalink" value="@post.getPermalink()" />

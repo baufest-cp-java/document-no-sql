@@ -1,6 +1,3 @@
-/**
- * 
- */
 package models;
 
 import java.util.ArrayList;
@@ -144,14 +141,13 @@ public class Post {
 		post.setTags(fromTagToTagsList(postObject.get("tags").toString()));
 		post.setTitle(postObject.get("title").toString());
 		post.setPermalink(postObject.get("permalink").toString());
-		//TODO terminar de popular el post con el dbobject
 		List<Comment> comments=new ArrayList<Comment>();
 		List<DBObject> commentsDB=((List<DBObject>) postObject.get("comments"));
 		for (DBObject dbObject: commentsDB){
 			comments.add(setCommentObject(dbObject));
 		}
 		post.setComments(comments);
-		System.out.println("SIZE COMMENTS: "+comments.size());
+		//TODO terminar de popular el post con los likes
 		return post;
 	}
 	
@@ -168,7 +164,8 @@ public class Post {
 	}
 	public static List<Post> findAll() {
 		List<Post> listPost = new ArrayList<Post>();
-		DBCursor cursor =  MongoUtil.getCollection(USER_COLLECTION_NAME).find();
+		DBCursor cursor =  MongoUtil.getCollection(USER_COLLECTION_NAME).find()
+						   .sort(new BasicDBObject("date",-1));
 		try {
 		   while(cursor.hasNext())
 			   listPost.add(setPostObject(cursor.next()));
@@ -192,5 +189,28 @@ public class Post {
 	 
 		postCollection.update(searchQuery, newDocument);
 		
+	}
+	
+	public static Integer like(String permalink, String user) {
+		DBCollection postCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
+		
+		BasicDBObject likeDB = new BasicDBObject().append("author", user);
+		
+		BasicDBObject newDocument = new BasicDBObject();
+		newDocument.append("$addToSet", new BasicDBObject().append("likes", likeDB));
+		
+		BasicDBObject searchQuery = new BasicDBObject().append("permalink",permalink);
+		 
+		postCollection.update(searchQuery, newDocument);
+		
+		return Post.getLikes(permalink);
+	}
+	
+	private static Integer getLikes(String permalink){
+		DBCollection postCollection = MongoUtil.getCollection(USER_COLLECTION_NAME);
+		
+		List<DBObject> likesDB=(List<DBObject>) postCollection.findOne(new BasicDBObject("permalink",permalink)).get("likes");
+		
+		return likesDB.size();
 	}
 }

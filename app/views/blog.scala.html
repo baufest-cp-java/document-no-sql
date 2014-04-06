@@ -7,18 +7,20 @@
 	<h2>Bienvenido al blog, @user  | <a href="/post">Nuevo Post</a> | <a href="logout">Logout</a></h2>
 	
     <h2><b>Blog NOSQL</b></h2>
-
 	
-	<i>LISTA DE POSTS:</i>
-	
-	
-	
- 	<ul>
+ 	<ul style="list-style-type: none;">
   		@posts.map {post =>
-   			<li> <a href="/post/@post.getPermalink">@post.getTitle()</a> </li>
+   			<li> 
+   				<h1><a href="/post/@post.getPermalink">@post.getTitle()</a> </h1>
+				@post.getCreationDate() Por @post.getAuthor()
+				Comentarios: @post.getComments().size()
+				Likes: @post.getLikes().size()
+				<input type="button" value="Me Re Gusta" id="like" name="@post.getPermalink">
+				<hr>
+				@post.getBody()
+				<br/><br/>
+   			</li>
   			}
  
  	</ul>
-
-
 }

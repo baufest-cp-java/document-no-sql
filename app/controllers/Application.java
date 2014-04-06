@@ -1,7 +1,6 @@
 package controllers;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +16,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
 public class Application extends Controller {
-
 	static Form<User> userForm = Form.form(User.class);
 	static Form<Post> postForm = Form.form(Post.class);
 	static Form<Comment> commentForm = Form.form(Comment.class);
@@ -55,7 +53,6 @@ public class Application extends Controller {
     }
     
     public static Result blog() {
-    	//TODO pasar lista de los últimos posts
     	String user = session("userName");
     	List<Post> posts = Post.findAll();
     	return ok(views.html.blog.render(user,posts)); 
@@ -117,6 +114,12 @@ public class Application extends Controller {
     			return badRequest(views.html.index.render(filledForm));
     		}
     	}
+    }
+    
+    public static Result like(String permalink){
+    	String user = session("userName");
+    	Integer likes = Post.like(permalink,user);
+    	return ok(likes.toString());
     }
     
     public static Result mongoTest(){
