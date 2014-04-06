@@ -141,13 +141,20 @@ public class Post {
 		post.setTags(fromTagToTagsList(postObject.get("tags").toString()));
 		post.setTitle(postObject.get("title").toString());
 		post.setPermalink(postObject.get("permalink").toString());
-		List<Comment> comments=new ArrayList<Comment>();
-		List<DBObject> commentsDB=((List<DBObject>) postObject.get("comments"));
+		List<Comment> comments = new ArrayList<Comment>();
+		List<DBObject> commentsDB = ((List<DBObject>) postObject.get("comments"));
 		for (DBObject dbObject: commentsDB){
 			comments.add(setCommentObject(dbObject));
 		}
 		post.setComments(comments);
-		//TODO terminar de popular el post con los likes
+		List<String> likes = new ArrayList<String>();
+		List<DBObject> likesDB=((List<DBObject>) postObject.get("likes"));
+		if(likesDB != null){
+			for (DBObject dbObject: likesDB){
+				likes.add(dbObject.get("author").toString());
+			}
+		}
+		post.setLikes(likes);
 		return post;
 	}
 	

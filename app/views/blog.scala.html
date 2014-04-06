@@ -14,8 +14,8 @@
    				<h1><a href="/post/@post.getPermalink">@post.getTitle()</a> </h1>
 				@post.getCreationDate() Por @post.getAuthor()
 				Comentarios: @post.getComments().size()
-				Likes: @post.getLikes().size()
-				<input type="button" value="Me Re Gusta" id="like" name="@post.getPermalink">
+				Likes: <span name="like@post.getPermalink">@post.getLikes().size()</span>
+				<input type="button" value="Me Re Gusta" class="like" name="@post.getPermalink">
 				<hr>
 				@post.getBody()
 				<br/><br/>

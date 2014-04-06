@@ -21,7 +21,7 @@ public class Application extends Controller {
 	static Form<Comment> commentForm = Form.form(Comment.class);
 	
     public static Result index() {
-    	return redirect(routes.Application.signup());
+    	return redirect(routes.Application.login());
     }
     
     public static Result signup() {
@@ -40,7 +40,7 @@ public class Application extends Controller {
     	} else {
     		if(User.validate(filledForm.get())){
     			session("userName", filledForm.get().getName());
-    			return redirect(routes.Application.welcome());
+    			return redirect(routes.Application.blog());
     		}else{
     			return badRequest(views.html.login.render(filledForm));
     		}

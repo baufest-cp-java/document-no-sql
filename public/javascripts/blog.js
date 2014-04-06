@@ -1,9 +1,11 @@
-$("#like").on(function(){
-	var permalink = this.name;
-	$.post("/like/" + permalink,
-	  null,
-	  function(data,status){
-		alert("SE ENVIO UN LIKE");
-//	    alert("Data: " + data + "\nStatus: " + status);
-	  });
-})
+$(document).ready(function(){
+	$(".like").click(function(){
+		var permalink = this.name;
+		$.post("/like/" + permalink,
+				null,
+				function(data,status){
+					$( "span[name='like" + permalink + "']" ).text(data);
+				}
+		);
+	})
+});

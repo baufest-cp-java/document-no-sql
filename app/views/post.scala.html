@@ -7,7 +7,8 @@
 	<h1>@post.getTitle()</h1>
 	@post.getCreationDate() Por @post.getAuthor()
 	Comentarios: @post.getComments().size()
-	Likes: @post.getLikes().size()
+	Likes: <span name="like@post.getPermalink">@post.getLikes().size()</span>
+	<input type="button" value="Me Re Gusta" class="like" name="@post.getPermalink">
 	<hr>
 	@post.getBody()
 	<br/><br/>
